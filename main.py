@@ -107,6 +107,7 @@ class Player(Ship):
         self.laser_img = player_bullet
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
+        self.SCORE=0
 
     def shoot(self):
         if self.cool_down_counter == 0:
@@ -115,6 +116,12 @@ class Player(Ship):
             self.cool_down_counter = 1
             laser_music = mixer.Sound('laser.wav')
             laser_music.play()
+
+    def update_score(self):
+        self.SCORE+=1
+
+    def get_score(self):
+        return self.SCORE
 
 
 
@@ -129,9 +136,7 @@ class Player(Ship):
             else:
                 for obj in objs:
                     if laser.collision(obj):
-                        
-
-
+                        self.update_score()
                         collision_music = mixer.Sound('explosion.wav')
                         collision_music.play()
 
@@ -198,7 +203,7 @@ def main():
     wav_length = 5
 
     player = Player(300, 500)
-    score_value=0
+
 
 
 
@@ -211,7 +216,7 @@ def main():
         # draw text
         lives_label = main_font.render(f"Lives: {lives}", True, (255, 255, 255))
         level_label = main_font.render(f"Level: {level}", True, (255, 255, 255))
-        score_label = score_font.render(f"Score: {score_value}",True,(255,255,255))
+        score_label = score_font.render(f"Score: {player.get_score()}",True,(255,255,255))
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (800 - level_label.get_width() - 10, 10))
         WIN.blit(score_label,(10,lives_label.get_height()+30))
@@ -226,7 +231,11 @@ def main():
 
         if lost:
             lost_label = lost_font.render('YOU LOST :(', True, (255, 255, 255))
-            WIN.blit(lost_label, (width / 2 - lost_label.get_width() / 2, height / 2))
+            lost_label_rect = lost_label.get_rect(center=(width / 2, height / 2 - 50))
+            score_label = lost_font.render(f'Your Score: {player.get_score()}', True, (255, 255, 255))
+            score_label_rect = score_label.get_rect(center=(width / 2, height / 2 + 50))
+            WIN.blit(lost_label, lost_label_rect)
+            WIN.blit(score_label, score_label_rect)
 
         pygame.display.update()
 
@@ -283,6 +292,8 @@ def main():
 
 
 
+
+
             if collide(enemy, player):
                 player.health -= 10
                 collision_music = mixer.Sound('explosion.wav')
@@ -297,6 +308,7 @@ def main():
             elif enemy.y + enemy.get_height() > height:
                 lives -= 1
                 enemies.remove(enemy)
+
 
         player.move_lasers(-laser_vel, enemies)
 
