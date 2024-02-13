@@ -20,7 +20,10 @@ Blaster is a classic space shooter game built using the Pygame library in Python
 
 **Screenshots:**
 
-![Blaster - Space Shooter Game](Screenshot 2024-02-13 124127.png)
+![Blaster - Space Shooter Game](screenshot3.png)
+![Blaster - Space Shooter Game](screenshot2.png)
+![Blaster - Space Shooter Game](screenshot.png)
+
 
 
 **Credits:**
